@@ -1,0 +1,116 @@
+SHELL = /bin/sh
+host_os = linux-gnu
+HOST_OS = 
+srcdir = .
+abs_srcdir = /home/danrugeles/Installs/lemur-light
+top_srcdir = .
+
+prefix = /usr/local
+exec_prefix = ${prefix}
+bindir = ${exec_prefix}/bin
+sbindir = ${exec_prefix}/sbin
+libexecdir = ${exec_prefix}/libexec
+datadir = ${prefix}/share
+sysconfdir = ${prefix}/etc
+sharedstatedir = ${prefix}/com
+localstatedir = ${prefix}/var
+libdir = ${exec_prefix}/lib
+infodir = ${prefix}/info
+mandir = ${prefix}/man
+includedir = ${prefix}/include
+oldincludedir = /usr/include
+pkgdatadir = $(datadir)/lemur
+pkglibdir = $(libdir)/lemur
+pkgincludedir = $(includedir)/lemur
+top_builddir = .
+
+AR = ar
+CC = gcc
+CXX = g++
+LEX = flex
+INSTALL = /usr/bin/install -c
+INSTALL_DATA = ${INSTALL} -m 644
+INSTALL_PROGRAM = ${INSTALL}
+INSTALL_DIR = ${INSTALL} -m 755 -d
+
+JAVAC = 
+JAR = 
+JAVAINC = 
+JAVAHOME = 
+SWIG = 
+PHP_SHARED = -shared
+JAVA_SHARED = -shared
+CSHARP_SHARED = -shared
+PHP_SO = .so
+JAVA_SO = .so
+CSHARP_SO = .so
+PHPINCLUDE = 
+MCS=
+
+MODULES = retrieval langmod index parsing utility contrib/antlr contrib/xpdf
+PACKAGE = lemur
+VERSION = 4.3
+distdir = $(PACKAGE)-$(VERSION)
+top_distdir = $(distdir)
+
+LEMURLIB = lib$(PACKAGE).a
+WITH_DISTRIB = 0
+WITH_SUMMARIZATION = 0
+WITH_CLUSTER = 0
+WITH_SWIG = 0
+WITH_JAVA = 0
+WITH_PHP = 0
+WITH_CSHARP = 0
+
+ALLMODULES=cluster summarization distrib retrieval langmod index parsing utility
+CONTMODULES=$(ALLMODULES) contrib/antlr contrib/xpdf
+# C++ source files
+CPPSRC1 = $(notdir $(wildcard ../src/*.cpp))
+CPPSRC2 = $(notdir $(wildcard ../src/*.cc))
+CPPSRC3 = $(notdir $(wildcard ../src/*.C))
+# C source files
+CSRC =  $(notdir $(wildcard ../src/*.c))
+# flex source files
+FSRC =  $(notdir $(wildcard ../src/*.l))
+# Flex objects
+FCPP = $(filter-out $(CPPSRC1), $(FSRC:.l=.cpp))
+CPPSRC = $(CPPSRC1) $(CPPSRC3) $(CPPSRC3) $(FCPP)
+.SECONDARY: $($(wildcard ../src/*.l).l=.cpp)
+# C++ header files
+CPPHEADER = $(wildcard ../include/*.hpp)
+# C header files
+CHEADER = $(wildcard ../include/*.h)
+# All header files
+ALLHEADER = $(CPPHEADER) $(CHEADER)
+INDRIHEADER = $(wildcard ../include/indri/*.h*)
+# Include path
+INCPATH = -I../include $(patsubst %, -I../../%/include, $(MODULES))
+ALLINCPATH = -I../include $(patsubst %, -I../../%/include, $(CONTMODULES))
+
+# C++ objects
+CPPOBJ = $(CPPSRC:.cpp=.o) $(CPPSRC2:.cc=.o) $(CPPSRC3:.C=.o)
+
+# C objects
+COBJ = $(CSRC:.c=.o)
+# all objects
+OBJ = $(CPPOBJ) $(COBJ)
+
+# C compiler and compiling options
+# C++ compiler and compiling/linking options
+CFLAGS = -DPACKAGE_NAME=\"Lemur\" -DPACKAGE_TARNAME=\"lemur\" -DPACKAGE_VERSION=\"4.3\" -DPACKAGE_STRING=\"Lemur\ 4.3\" -DPACKAGE_BUGREPORT=\"project@lemurproject.org\" -DYYTEXT_POINTER=1 -DHAVE_LIBM=1 -DHAVE_LIBPTHREAD=1 -DHAVE_LIBZ=1 -DHAVE_NAMESPACES= -DISNAN_IN_NAMESPACE_STD= -DHAVE_FSEEKO=1 -DHAVE_MKSTEMP=1 -DHAVE_MKSTEMPS=1 -DP_HAS_ATOMIC_INT=1 -DP_NEEDS_GNU_CXX_NAMESPACE=1 -DWITH_DISTRIB=0 -DWITH_SUMMARIZATION=0 -DNDEBUG=1 -DWITH_CLUSTER=0  -g -O2 -shared -fPIC
+CXXFLAGS    = -DPACKAGE_NAME=\"Lemur\" -DPACKAGE_TARNAME=\"lemur\" -DPACKAGE_VERSION=\"4.3\" -DPACKAGE_STRING=\"Lemur\ 4.3\" -DPACKAGE_BUGREPORT=\"project@lemurproject.org\" -DYYTEXT_POINTER=1 -DHAVE_LIBM=1 -DHAVE_LIBPTHREAD=1 -DHAVE_LIBZ=1 -DHAVE_NAMESPACES= -DISNAN_IN_NAMESPACE_STD= -DHAVE_FSEEKO=1 -DHAVE_MKSTEMP=1 -DHAVE_MKSTEMPS=1 -DP_HAS_ATOMIC_INT=1 -DP_NEEDS_GNU_CXX_NAMESPACE=1 -DWITH_DISTRIB=0 -DWITH_SUMMARIZATION=0 -DNDEBUG=1 -DWITH_CLUSTER=0  -g -O2 -shared -fPIC
+CPPLDFLAGS  =  -lz -lpthread -lm 
+
+ALLBIN = BuildIndex RetrievalEval
+
+ifneq ($(WITH_DISTRIB),0)
+ALLBIN += CollSelIndex DistRetEval QryBasedSample
+endif
+
+ifneq ($(WITH_SUMMARIZATION),0)
+ALLBIN += BasicSummApp MMRSummApp
+endif
+
+ifneq ($(WITH_CLUSTER),0)
+ALLBIN += Cluster OfflineCluster PLSA
+endif

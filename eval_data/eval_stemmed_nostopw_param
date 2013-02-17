@@ -1,0 +1,7 @@
+<parameters>
+<index>eval_data_stemmed_nostopw_index.ifp</index>
+<query>query_stemmed_nostopw</query>
+<weightScheme>RawTF</weightScheme>
+<result>result_rawtf_stemmed_nostopw</result>
+<resultCount>100</resultCount>
+</parameters>

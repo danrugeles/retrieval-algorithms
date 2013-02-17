@@ -1,0 +1,7 @@
+<parameters>
+<index>eval_data_index.ifp</index>
+<query>query</query>
+<weightScheme>RawTF</weightScheme>
+<result>result_rawtf</result>
+<resultCutOff>100</resultCutOff>
+</parameters>

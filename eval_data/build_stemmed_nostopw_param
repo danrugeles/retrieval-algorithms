@@ -1,0 +1,9 @@
+<parameters>
+   <index>eval_data_stemmed_nostopw_index</index>
+   <indexType>inv</indexType>
+   <position>1</position>
+   <docFormat>web</docFormat>
+   <memory>25000000</memory>
+   <stemmer>porter</stemmer>
+   <stopwords>stopwordlist</stopwords>
+</parameters>

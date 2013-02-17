@@ -1,0 +1,6 @@
+<parameters>
+<docFormat>trec</docFormat>
+<outputFile>purdue_cs_query_file.query</outputFile>
+<stemmer>porter</stemmer>
+<stopwords>stopwordlist</stopwords>
+</parameters>

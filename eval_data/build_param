@@ -1,0 +1,7 @@
+<parameters>
+<index>eval_data_index</index>
+<indexType>inv</indexType>
+<position>1</position>
+<docFormat>web</docFormat>
+<memory>25000000</memory>
+</parameters>
