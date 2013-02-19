@@ -129,7 +129,7 @@ bool lemur::index::InvIndex::open(const string &indexName){
   if (!docIDs())
     return false;
 
-  *msgstream << "Load index complete." << endl;
+  //*msgstream << "Load index complete." << endl;
   return true;
 }
 
@@ -321,7 +321,7 @@ lemur::api::TermInfoList* lemur::index::InvIndex::termInfoList(lemur::api::DOCID
  =======================================================================*/
 bool lemur::index::InvIndex::fullToc(const string &fileName) {
   ifstream in(fileName.c_str());
-  *msgstream << "Trying to open toc: " << fileName << endl;
+  //*msgstream << "Trying to open toc: " << fileName << endl;
   if (!in.is_open()) {
     *msgstream << "Couldn't open toc file for reading" << endl;
     return false;
@@ -379,7 +379,7 @@ bool lemur::index::InvIndex::fullToc(const string &fileName) {
 
 bool lemur::index::InvIndex::indexLookup() {
   FILE* in = fopen(names[DOC_LOOKUP].c_str(), "rb");
-  *msgstream << "Trying to open invlist lookup: " << names[DOC_LOOKUP] << endl;
+  //*msgstream << "Trying to open invlist lookup: " << names[DOC_LOOKUP] << endl;
   if (in == NULL) {
     *msgstream << "Couldn't open invlist lookup table for reading" << endl;
     return false;
@@ -407,8 +407,7 @@ bool lemur::index::InvIndex::indexLookup() {
 
 bool lemur::index::InvIndex::dtLookup_ver1() {
   FILE* in = fopen(names[TERM_LOOKUP].c_str(), "rb");
-  *msgstream << "Trying to open dtlist lookup: " 
-             << names[TERM_LOOKUP] << endl;
+  //*msgstream << "Trying to open dtlist lookup: " << names[TERM_LOOKUP] << endl;
   if (in == NULL) {
     *msgstream <<  "Couldn't open dt lookup table for reading" << endl;
     return false;
@@ -431,7 +430,7 @@ bool lemur::index::InvIndex::dtLookup_ver1() {
 }
 
 bool lemur::index::InvIndex::dtLookup() {
-  *msgstream << "Trying to open dtlist lookup: " << names[TERM_LOOKUP] << endl;
+  //*msgstream << "Trying to open dtlist lookup: " << names[TERM_LOOKUP] << endl;
 
   FILE* in = fopen(names[TERM_LOOKUP].c_str(), "rb");
 
@@ -460,7 +459,7 @@ bool lemur::index::InvIndex::dtLookup() {
 
 bool lemur::index::InvIndex::dtFileIDs() {
   ifstream in (names[TERM_INDEX].c_str());
-  *msgstream << "Trying to open term index filenames: " << names[TERM_INDEX] << endl;
+  //*msgstream << "Trying to open term index filenames: " << names[TERM_INDEX] << endl;
   if (!in.is_open()) {
     *msgstream << "Error opening term index filenames file" << endl;
     return false;
@@ -495,7 +494,7 @@ bool lemur::index::InvIndex::dtFileIDs() {
 
 bool lemur::index::InvIndex::docMgrIDs() {
   ifstream in (names[DOCMGR_IDS].c_str());
-  *msgstream << "Trying to open doc manager ids file: " << names[DOCMGR_IDS] << endl;
+  //*msgstream << "Trying to open doc manager ids file: " << names[DOCMGR_IDS] << endl;
   if (!in.is_open()) {
     *msgstream << "Error opening doc manager ids" << std::endl;
     return false;
@@ -522,7 +521,7 @@ bool lemur::index::InvIndex::docMgrIDs() {
 
 bool lemur::index::InvIndex::invFileIDs() {
   ifstream in (names[DOC_INDEX].c_str());
-  *msgstream << "Trying to open inverted index filenames: " << names[DOC_INDEX] << endl;
+  //*msgstream << "Trying to open inverted index filenames: " << names[DOC_INDEX] << endl;
   if (!in.is_open()) {
     *msgstream <<  "Error opening inverted index filenames file"<< endl;
     return false;
@@ -555,7 +554,7 @@ bool lemur::index::InvIndex::invFileIDs() {
 
 bool lemur::index::InvIndex::termIDs() {
   ifstream in (names[TERM_IDS].c_str());
-  *msgstream << "Trying to open term ids file: " << names[TERM_IDS] << endl;
+  //*msgstream << "Trying to open term ids file: " << names[TERM_IDS] << endl;
   if (in == NULL) {
     *msgstream <<  "Error opening termfile" << endl;
     return false;
@@ -589,7 +588,7 @@ bool lemur::index::InvIndex::termIDs() {
 
 bool lemur::index::InvIndex::docIDs() {
   ifstream in (names[DOC_IDS].c_str());
-  *msgstream<< "Trying to open doc ids file: " << names[DOC_IDS] << endl;
+  //*msgstream<< "Trying to open doc ids file: " << names[DOC_IDS] << endl;
   if (in == NULL) {
     *msgstream << "Error opening docfile" << endl;
     return false;

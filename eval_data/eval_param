@@ -1,7 +1,7 @@
 <parameters>
 <index>eval_data_index.ifp</index>
 <query>query</query>
-<weightScheme>RawTF</weightScheme>
-<result>result_rawtf</result>
+<weightScheme>Okapi</weightScheme>
+<result>result_okapi</result>
 <resultCutOff>100</resultCutOff>
 </parameters>

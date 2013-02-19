@@ -60,7 +60,21 @@ double computeRawTFWeight(int docID,
 		     double qryTermWeight,
 		     Index *ind)
 {
+  double numDocsWithTerm=(double)(ind->docCount(termID));
+  double totalNumDocs=(double)ind->docCount();
+
   //implementation of raw TF weighting scheme
+  cout<<"the weight "<<qryTermWeight<<endl;
+
+
+  /*cout<<"RawTF "<<docTermFreq*qryTermWeight<<endl;
+  cout<<"RawTFIDweight "<<docTermFreq*log(totalNumDocs/numDocsWithTerm+1)*qryTermWeight<<endl;
+  cout<<"LogTFIDF "<<log((double)docTermFreq)*log(totalNumDocs/numDocsWithTerm+1)*qryTermWeight<<endl;
+  double okapi_term1=docTermFreq/((double)docTermFreq+0.5+1.5*((double)ind->docLength(docID)/(double)(ind->docLengthAvg())));
+  double okapi_term2=log((totalNumDocs-numDocsWithTerm+0.5)/(numDocsWithTerm+0.5));
+  double okapi_term3=(8+qryTermWeight/7+qryTermWeight);
+  cout<<"Okapi "<<okapi_term1*okapi_term2*okapi_term3<<endl;*/
+ 
   return docTermFreq*qryTermWeight;
 }
 
@@ -73,6 +87,10 @@ double computeRawTFIDFWeight(int docID,
 		     Index *ind)
 {
   /*!!!!! Implement raw TF and IDF weighting scheme !!!!!*/
+cout<<"ratwf";
+  double numDocsWithTerm=(double)(ind->docCount(termID));
+  double totalNumDocs=(double)ind->docCount();
+  return docTermFreq*log(totalNumDocs/numDocsWithTerm+1)*qryTermWeight;
 }
 
 
@@ -84,6 +102,10 @@ double computeLogTFIDFWeight(int docID,
 		     Index *ind)
 {
   /*!!!!! Implement log TF and IDF weighting scheme !!!!!*/
+cout<<"logratwf";
+  double numDocsWithTerm=(double)(ind->docCount(termID));
+  double totalNumDocs=(double)ind->docCount();
+  return log(docTermFreq)*log(totalNumDocs/numDocsWithTerm+1)*qryTermWeight;
 }
 
 // compute the weight of a matched term
@@ -94,6 +116,13 @@ double computeOkapiWeight(int docID,
 		     Index *ind)
 {
   /*!!!!! Implement Okapi weighting scheme !!!!!*/
+cout<<"Okapi";
+  double numDocsWithTerm=(double)(ind->docCount(termID));
+  double totalNumDocs=(double)ind->docCount();
+  double okapi_term1=docTermFreq/((double)docTermFreq+0.5+1.5*((double)ind->docLength(docID)/(double)(ind->docLengthAvg())));
+  double okapi_term2=log((totalNumDocs-numDocsWithTerm+0.5)/(numDocsWithTerm+0.5));
+  double okapi_term3=(8+qryTermWeight)/(7+qryTermWeight);
+  return okapi_term1*okapi_term2*okapi_term3;
 }
 
 
@@ -101,9 +130,32 @@ double computeCustomWeight(int docID,
 		     int termID, 
 		     int docTermFreq, 
 		     double qryTermWeight,
-		     Index *ind)
+		     Index *ind,char* argv[])
 {
   /*!!!!! Implement customized weighting scheme !!!!!*/  
+	double a=atof(argv[3]);
+	double 	b=atof(argv[4]);
+	double 	c=atof(argv[5]);
+	double 	d=atof(argv[6]);
+	double 	e=atof(argv[7]);
+
+
+
+  double numDocsWithTerm=(double)(ind->docCount(termID));
+  double totalNumDocs=(double)ind->docCount();
+  double okapi_term1=docTermFreq/((double)docTermFreq+a+b*((double)ind->docLength(docID)/(double)(ind->docLengthAvg())));
+  double okapi_term2=log((totalNumDocs-numDocsWithTerm+c)/(numDocsWithTerm+c));
+  double okapi_term3=(d+qryTermWeight)/(e+qryTermWeight);
+//  double rugeles_term=((double)(docTermFreq)/(double)(ind->docLength(docID)))*1.5+1;
+
+  return okapi_term1*okapi_term2*okapi_term3;
+  //cout<<"Frequency of term in document "<<docTermFreq<<endl;
+  //cout<<"Length of document "<<(double)ind->docLength(docID)<<endl;
+//  double rugeles_term=(double)(docTermFreq)/(double)(ind->docLength(docID))+0.9;
+  //cout<< rugeles_term<<endl;
+	//cout<<argv[3];
+  
+
 }
 
 
@@ -144,9 +196,8 @@ void ComputeQryArr(Document *qryDoc, double *qryArr, Index *ind){
 
 
 
-void Retrieval(double *qryArr, IndexedRealVector &results, Index *ind){
+void Retrieval(double *qryArr, IndexedRealVector &results, Index *ind,char* argv[]){
   //retrieve documents with respect to the array representation of the query
-
   lemur::retrieval::ArrayAccumulator scoreAccumulator(ind->docCount());
 
   scoreAccumulator.reset();
@@ -192,7 +243,7 @@ void Retrieval(double *qryArr, IndexedRealVector &results, Index *ind){
 				  t, // term ID
 				  matchInfo->termCount(), // freq of term t in this doc
 				  qryArr[t], // freq of term t in the query
-				  ind);	  
+				  ind,argv);	  
 	}else{
 	  cerr<<"The weighting scheme of "<<LocalParameter::weightScheme.c_str()<<" is not supported"<<endl;
           exit(1);
@@ -211,7 +262,7 @@ void Retrieval(double *qryArr, IndexedRealVector &results, Index *ind){
     } else {
       s=0;
     }
-
+        
     if (strcmp(LocalParameter::weightScheme.c_str(),"RawTF")==0) {
       results.PushValue(d, computeAdjustedScore(s, // the score from the accumulator
 						d, // doc ID
@@ -242,8 +293,9 @@ void Retrieval(double *qryArr, IndexedRealVector &results, Index *ind){
 
 /// A retrieval evaluation program
 int AppMain(int argc, char *argv[]) {
+	
+	cout<<"argc"<<argc;
   
-
   //Step 1: Open the index file
   Index  *ind;
 
@@ -273,27 +325,25 @@ int AppMain(int argc, char *argv[]) {
 
 
   // go through each query
-  
   qryStream->startDocIteration();
   while (qryStream->hasMore()) {
     Document *qryDoc = qryStream->nextDoc();
     const char *queryID = qryDoc->getID();
-    cout << "query: "<< queryID <<endl;
 
-    double *queryArr = new double[ind->termCountUnique()+1];  //the array that contains the weights of query terms; for orignial query 
+	//the array that contains the weights of query terms; for original query 
+    double *queryArr = new double[ind->termCountUnique()+1];  
     ComputeQryArr(qryDoc,queryArr, ind); 
 
     IndexedRealVector results(ind->docCount());
     results.clear();
 
-    Retrieval(queryArr,results,ind);
+    Retrieval(queryArr,results,ind,argv);
 
     results.Sort();
     resultFile.writeResults(queryID, &results, LocalParameter::resultCount);
-
     delete queryArr;
   }
-
+  
 
 
   result.close();

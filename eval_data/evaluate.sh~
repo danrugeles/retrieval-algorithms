@@ -1,0 +1,2 @@
+../trec_eval qrel result_okapi
+../trec_eval qrel result_custom_stemmed_nostopw

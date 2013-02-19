@@ -1,0 +1,7 @@
+<parameters>
+<index>eval_data_stemmed_nostopw_index.ifp</index>
+<query>purdue_cs_query_file.query</query>
+<weightScheme>RawTF</weightScheme>
+<result>result_purdue_cs_rawtfidf_stemmed_nostopw</result>
+<resultCount>8</resultCount>
+</parameters>
